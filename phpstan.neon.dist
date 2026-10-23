@@ -1,0 +1,7 @@
+parameters:
+	level: 8
+	paths:
+		- formlyx.php
+		- uninstall.php
+		- includes
+	treatPhpDocTypesAsCertain: false

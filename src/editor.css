@@ -1,0 +1,14 @@
+.formlyx-embed-auth {
+	margin: 12px 0;
+}
+
+.formlyx-block-preview {
+	border: 1px dashed #949494;
+	box-sizing: border-box;
+	max-width: 100%;
+	padding: 16px;
+}
+
+.formlyx-block-preview p {
+	margin: 8px 0 0;
+}

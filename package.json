@@ -1,0 +1,21 @@
+{
+	"name": "formlyx",
+	"version": "1.0.0",
+	"private": true,
+	"description": "Connect Formlyx to WordPress and embed hosted forms.",
+	"author": "RazorSoft, Inc.",
+	"license": "GPL-2.0-or-later",
+	"engines": {
+		"node": "^22.22.2 || ^24.15.0 || >=26.0.0"
+	},
+	"scripts": {
+		"build": "wp-scripts build",
+		"check-engines": "wp-scripts check-engines",
+		"lint:js": "wp-scripts lint-js",
+		"plugin-zip": "wp-scripts plugin-zip && python3 bin/filter-plugin-zip.py",
+		"start": "wp-scripts start"
+	},
+	"devDependencies": {
+		"@wordpress/scripts": "^36.1.0"
+	}
+}
