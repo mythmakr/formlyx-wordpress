@@ -19,3 +19,4 @@ README.md export-ignore
 node_modules export-ignore
 vendor export-ignore
 build export-ignore
+video export-ignore

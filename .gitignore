@@ -12,3 +12,6 @@ phpcs-cache.json
 formlyx.zip
 /wordpress/
 /tests/php/tmp/
+/video/wordpress-walkthrough/node_modules/
+/video/wordpress-walkthrough/out/
+/video/wordpress-walkthrough/public/captures/

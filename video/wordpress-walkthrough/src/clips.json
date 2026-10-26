@@ -1,0 +1,35 @@
+{
+  "intro": { "file": "captures/intro.webm", "startFrom": 0, "duration": 120 },
+  "plugins": { "file": "captures/plugins.webm", "startFrom": 30, "duration": 360 },
+  "connect": {
+    "file": "captures/connect-h264.mp4",
+    "startFrom": 30,
+    "duration": 510,
+    "parts": [
+      { "startFrom": 30, "duration": 150 },
+      { "startFrom": 300, "duration": 240 },
+      { "startFrom": 1110, "duration": 120 }
+    ]
+  },
+  "form": { "file": "captures/form.webm", "startFrom": 8, "duration": 300 },
+  "editor": {
+    "file": "captures/editor-h264.mp4",
+    "startFrom": 4440,
+    "duration": 600,
+    "parts": [
+      { "startFrom": 4440, "duration": 240 },
+      { "startFrom": 5550, "duration": 180 },
+      { "startFrom": 6120, "duration": 180 }
+    ]
+  },
+  "live": {
+    "file": "captures/live-h264.mp4",
+    "startFrom": 60,
+    "duration": 450,
+    "parts": [
+      { "file": "captures/live-h264.mp4", "startFrom": 60, "duration": 150 },
+      { "file": "captures/live-filled-h264.mp4", "startFrom": 1080, "duration": 300 }
+    ]
+  },
+  "outroStill": "captures/success.png"
+}
