@@ -21,7 +21,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['7.4', '8.3']
+        php: ['8.1', '8.3']
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -131,11 +131,11 @@ jobs:
         run: |
           unzip -l formlyx.zip > zip-list.txt
           cat zip-list.txt
-          if grep -E 'node_modules/|/vendor/|/tests/|/\.github/|/src/|composer\.(json|lock)|package(-lock)?\.json|README\.md|\.wp-env|\.gitkeep|\.map$' zip-list.txt; then
+          if grep -E 'node_modules/|/vendor/|/tests/|/\.github/|/src/|composer\.(json|lock)|package(-lock)?\.json|README\.md|\.wp-env|\.gitkeep|\.map$' zip-list.txt | grep -v 'formlyx/vendor/theme-adapter/'; then
             echo "Plugin package contains development files." >&2
             exit 1
           fi
-          for required in formlyx.php uninstall.php readme.txt license.txt includes/Plugin.php includes/Renderer.php includes/Blocks.php includes/embed.css build/block.json build/index.js build/index.asset.php; do
+          for required in formlyx.php uninstall.php readme.txt license.txt includes/Plugin.php includes/Renderer.php includes/Blocks.php includes/ThemeAdapter.php includes/embed.css vendor/theme-adapter/load.php vendor/theme-adapter/src/V0_1_0/Adapter.php vendor/theme-adapter/assets/detect.js vendor/theme-adapter/LICENSE vendor/theme-adapter-source.json build/block.json build/index.js build/index.asset.php; do
             grep -q "formlyx/${required}" zip-list.txt || {
               echo "Plugin package is missing ${required}." >&2
               exit 1

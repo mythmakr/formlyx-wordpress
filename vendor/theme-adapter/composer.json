@@ -1,0 +1,30 @@
+{
+	"name": "razorsoft/wordpress-theme-adapter",
+	"description": "Reads the active WordPress theme and publishes design tokens as CSS custom properties.",
+	"type": "library",
+	"license": "MIT",
+	"keywords": [
+		"wordpress",
+		"theme",
+		"design-tokens"
+	],
+	"homepage": "https://github.com/razorsoftinc/theme-adapter",
+	"support": {
+		"source": "https://github.com/razorsoftinc/theme-adapter",
+		"issues": "https://github.com/razorsoftinc/theme-adapter/issues"
+	},
+	"require": {
+		"php": ">=8.1"
+	},
+	"autoload": {
+		"psr-4": {
+			"RazorSoft\\ThemeAdapter\\": "src/"
+		}
+	},
+	"scripts": {
+		"test": "php tests/run.php"
+	},
+	"config": {
+		"sort-packages": true
+	}
+}

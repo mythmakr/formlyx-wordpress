@@ -230,13 +230,21 @@ msgstr ""
 msgid "Unstyled"
 msgstr ""
 
+#: src/edit.js:34
+msgid "Match WordPress Theme"
+msgstr ""
+
+#: src/edit.js:185
+msgid "Uses this site's theme on the hosted form. The appearance saved in Formlyx stays unchanged."
+msgstr ""
+
 #: src/edit.js:97
 #: src/edit.js:201
 msgid "Formlyx form"
 msgstr ""
 
-#: src/edit.js:99
-msgid "Theme"
+#: src/edit.js:179
+msgid "Appearance"
 msgstr ""
 
 #: src/edit.js:114

@@ -54,6 +54,14 @@ final class Embed {
 	private static $printed = false;
 
 	/**
+	 * Whether Match WordPress Theme assets were printed after the footer.
+	 *
+	 * @since 1.0.0
+	 * @var bool
+	 */
+	private static $adapter_printed = false;
+
+	/**
 	 * Reset the late-print flag during unit tests.
 	 *
 	 * @since 1.0.0
@@ -62,18 +70,24 @@ final class Embed {
 	 */
 	public static function reset(): void {
 		if ( defined( 'FORMLYX_UNIT_TESTS' ) ) {
-			self::$printed = false;
+			self::$printed         = false;
+			self::$adapter_printed = false;
 		}
 	}
 
 	/**
 	 * Register and enqueue the embed assets.
 	 *
+	 * Match WordPress Theme also publishes this plugin's Theme Adapter copy.
+	 * The hosted script still renders the fields. Saved Formlyx tokens stay
+	 * the fallback inside that script.
+	 *
 	 * @since 1.0.0
 	 *
+	 * @param string $theme Stored appearance value.
 	 * @return void
 	 */
-	public static function enqueue(): void {
+	public static function enqueue( string $theme = 'auto' ): void {
 		if ( ! wp_script_is( self::SCRIPT, 'registered' ) ) {
 			wp_register_script( self::SCRIPT, self::SRC, array(), FORMLYX_VERSION, true );
 			wp_script_add_data( self::SCRIPT, 'strategy', 'defer' );
@@ -85,13 +99,27 @@ final class Embed {
 		}
 		wp_enqueue_style( self::STYLE );
 
+		$adapter_handle = '';
+		if ( 'match' === $theme ) {
+			$adapter_handle = ThemeAdapter::enqueue();
+		}
+
+		$late = did_action( 'wp_print_footer_scripts' ) || did_action( 'wp_footer' );
+		if ( ! $late ) {
+			return;
+		}
+		if ( '' !== $adapter_handle && ! self::$adapter_printed ) {
+			wp_print_styles( $adapter_handle );
+			if ( wp_script_is( $adapter_handle, 'registered' ) ) {
+				wp_print_scripts( $adapter_handle );
+			}
+			self::$adapter_printed = true;
+		}
 		if ( self::$printed ) {
 			return;
 		}
-		if ( did_action( 'wp_print_footer_scripts' ) || did_action( 'wp_footer' ) ) {
-			wp_print_styles( self::STYLE );
-			wp_print_scripts( self::SCRIPT );
-			self::$printed = true;
-		}
+		wp_print_styles( self::STYLE );
+		wp_print_scripts( self::SCRIPT );
+		self::$printed = true;
 	}
 }

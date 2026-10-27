@@ -1,5 +1,7 @@
 /node_modules/
-/vendor/
+/vendor/*
+!/vendor/theme-adapter/
+!/vendor/theme-adapter-source.json
 /build/
 /coverage/
 .phpunit.result.cache

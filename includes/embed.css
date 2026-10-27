@@ -2,3 +2,21 @@
 	box-sizing: border-box;
 	max-width: 100%;
 }
+
+/*
+ * Match WordPress Theme. embed.js copies these host variables onto the form
+ * fields. The rules stay on this plugin's container. Error and success colors
+ * are not set here.
+ */
+.formlyx-embed[data-theme="match"] {
+	--formlyx-primary: var(--razor-theme-color-primary);
+	--formlyx-background: var(--razor-theme-color-background);
+	--formlyx-text: var(--razor-theme-color-text);
+	--formlyx-muted: color-mix(in srgb, var(--razor-theme-color-text) 68%, var(--razor-theme-color-background));
+	--formlyx-border: var(--razor-theme-color-border);
+	--formlyx-radius: var(--razor-theme-radius);
+	--formlyx-font: var(--razor-theme-font-family);
+	--formlyx-input-bg: var(--razor-theme-color-background);
+	--formlyx-button-bg: var(--razor-theme-button-background);
+	--formlyx-button-text: var(--razor-theme-button-color);
+}

@@ -864,8 +864,11 @@ if ( ! function_exists( 'plugins_url' ) ) {
 	 * @return string
 	 */
 	function plugins_url( $path = '', $file = '' ) {
-		unset( $file );
-		return 'https://example.test/wp-content/plugins/formlyx/' . ltrim( (string) $path, '/' );
+		$base = 'https://example.test/wp-content/plugins/formlyx/';
+		if ( is_string( $file ) && false !== strpos( $file, '/vendor/theme-adapter/' ) ) {
+			$base .= 'vendor/theme-adapter/';
+		}
+		return $base . ltrim( (string) $path, '/' );
 	}
 }
 
@@ -886,6 +889,23 @@ if ( ! function_exists( 'wp_register_style' ) ) {
 			'ver'        => $ver,
 			'deps'       => $deps,
 		);
+		return true;
+	}
+}
+
+if ( ! function_exists( 'wp_add_inline_style' ) ) {
+	/**
+	 * Record inline CSS attached to a style handle.
+	 *
+	 * @param string $handle Handle.
+	 * @param string $data   CSS.
+	 * @return true
+	 */
+	function wp_add_inline_style( $handle, $data ) {
+		if ( ! isset( $GLOBALS['formlyx_test_styles'][ $handle ] ) ) {
+			$GLOBALS['formlyx_test_styles'][ $handle ] = array( 'registered' => true );
+		}
+		$GLOBALS['formlyx_test_styles'][ $handle ]['inline'][] = $data;
 		return true;
 	}
 }

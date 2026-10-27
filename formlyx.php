@@ -5,7 +5,7 @@
  * Description:       Connect Formlyx to WordPress and embed hosted forms.
  * Version:           1.0.0
  * Requires at least: 6.7
- * Requires PHP:      7.4
+ * Requires PHP:      8.1
  * Author:            RazorSoft, Inc.
  * Author URI:        https://razorsoft.us
  * License:           GPL-2.0-or-later
@@ -52,6 +52,7 @@ require_once FORMLYX_PLUGIN_DIR . 'includes/Authorization.php';
 require_once FORMLYX_PLUGIN_DIR . 'includes/ConnectionStatus.php';
 require_once FORMLYX_PLUGIN_DIR . 'includes/AdminPage.php';
 require_once FORMLYX_PLUGIN_DIR . 'includes/FormCatalog.php';
+require_once FORMLYX_PLUGIN_DIR . 'includes/ThemeAdapter.php';
 require_once FORMLYX_PLUGIN_DIR . 'includes/Embed.php';
 require_once FORMLYX_PLUGIN_DIR . 'includes/Renderer.php';
 require_once FORMLYX_PLUGIN_DIR . 'includes/FormsEndpoint.php';

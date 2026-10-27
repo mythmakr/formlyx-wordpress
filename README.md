@@ -9,7 +9,7 @@ Version 1.0.0 connects a WordPress site to a Formlyx account and embeds publishe
 | Requirement | Version | Why |
 | --- | --- | --- |
 | WordPress | 6.7 or newer, tested to 7.1 | 6.7 through 7.1 were still receiving maintenance releases in October 2026. WordPress.org statistics on 16 October 2026 put about 85% of sites on 6.7 or newer. 7.1.3 is the current release. |
-| PHP | 7.4 or newer | WordPress 7.0 and newer require PHP 7.4. Plugin code avoids PHP 8-only syntax. |
+| PHP | 8.1 or newer | The bundled RazorSoft Theme Adapter 0.1.0 requires PHP 8.1. WordPress 6.7 supports that version. |
 | Node.js | `^22.22.2`, `^24.15.0`, or `>=26`, development only | Required by `@wordpress/scripts` 36. Production sites do not need Node.js. |
 
 ## Connect a Formlyx account
@@ -58,9 +58,39 @@ The picker keeps at most 100 forms. Each name is limited to 200 characters and e
 ```text
 [formlyx id="FORM_ID"]
 [formlyx id="FORM_ID" theme="auto"]
+[formlyx id="FORM_ID" theme="match"]
 ```
 
-`theme` accepts `auto` (the default), `light`, `dark`, `inherit`, and `unstyled`. Those are the values `embed.js` understands. An unknown value is saved as `auto`.
+`theme` accepts `auto` (the default), `light`, `dark`, `inherit`, `unstyled`, and `match`. `auto`, `light`, `dark`, `inherit`, and `unstyled` are the values `embed.js` understands. An unknown value is saved as `auto`.
+
+`match` is **Match WordPress Theme**. The block sidebar lists it under Appearance, and the shortcode uses `theme="match"`. The plugin reads the active theme with the bundled Theme Adapter on that WordPress site, including a private or local site. It does not call SiteLens and it does not write the result back to the form saved in Formlyx.
+
+The container keeps `data-theme="match"`. Published `embed.js` treats an unrecognized `data-theme` as `auto`, so the saved Formlyx tokens remain the fallback. The plugin sets these host variables on `.formlyx-embed[data-theme="match"]`, and `embed.js` copies them onto the fields it renders in the page:
+
+| Host variable | Theme Adapter token |
+| --- | --- |
+| `--formlyx-primary` | `--razor-theme-color-primary` |
+| `--formlyx-background` | `--razor-theme-color-background` |
+| `--formlyx-text` | `--razor-theme-color-text` |
+| `--formlyx-muted` | A mix of the theme text and background. An invalid mix leaves the saved muted color in place. |
+| `--formlyx-border` | `--razor-theme-color-border` |
+| `--formlyx-radius` | `--razor-theme-radius` |
+| `--formlyx-font` | `--razor-theme-font-family` |
+| `--formlyx-input-bg` | `--razor-theme-color-background` |
+| `--formlyx-button-bg` | `--razor-theme-button-background` |
+| `--formlyx-button-text` | `--razor-theme-button-color` |
+
+Those variables reach labels, inputs, and the submit button because `embed.js` paints the form inside the container and reads `var(--formlyx-*, …)`. The rules are limited to `.formlyx-embed`. They do not restyle the rest of the WordPress theme.
+
+Deliberate exceptions, because `embed.js` sets them itself for the `auto` path that `match` uses:
+
+- Validation and success text stay the embed colors (`#b91c1c` and `#0f766e`). Required marks stay red. Theme accent colors are not applied to those states.
+- The submit button stays a pill. `embed.js` sets `border-radius: 999px` inline, so the theme button radius is not used.
+- Input border width, field padding, font size, and the form's spacing stay the embed layout.
+- Focus rings stay the browser and embed defaults. `embed.js` does not provide a hover token, so hover is left unchanged.
+- A classic theme that does not declare button metrics can update those button variables after the first paint. The adapter's `detect.js` fills only the gaps it marked. Block themes that already define the values do not load that script.
+
+Another plugin may bundle Theme Adapter too. Formlyx keeps the runtime returned by its own `vendor/theme-adapter/load.php` and enqueues that copy only when a form uses `match`. Same-version bundles share one class body. Different owners receive different style handles. `:root` custom properties still share one cascade, so two different adapter versions can disagree on a property; the stylesheet WordPress prints later wins that property.
 
 Several blocks and shortcodes can appear on one page, including two copies of the same form. The page loads `https://www.formlyx.com/embed.js` once, in the footer. If a form is rendered after the footer has already printed, the plugin prints that script at the form.
 
@@ -122,7 +152,7 @@ npm run plugin-zip
 | `composer syntax` | PHP syntax |
 | `composer lint` | WordPress Coding Standards |
 | `composer lint:fix` | Automatic coding-standard fixes |
-| `composer compat` | PHP 7.4 and newer |
+| `composer compat` | PHP 8.1 and newer |
 | `composer analyse` | PHPStan level 8 |
 | `composer test` | Unit tests with mocked Formlyx HTTP |
 | `composer test:integration` | WordPress integration tests |
@@ -145,6 +175,28 @@ This machine's Node.js is 25.9.0, which is outside the `@wordpress/scripts` rang
 
 `npm run build` writes `build/`. The plugin package includes that directory. `node --test tests/js/picker-state.test.cjs` checks the form-picker rules.
 
+## Theme Adapter
+
+Formlyx bundles RazorSoft Theme Adapter `0.1.0` (`razorsoft/wordpress-theme-adapter`).
+
+| | |
+| --- | --- |
+| Repository | https://github.com/razorsoftinc/theme-adapter |
+| Tag | `v0.1.0` |
+| Commit | `02a1354e42a53c23ae0f3e2eb0c1e088f8619577` |
+| Directory | `vendor/theme-adapter/` |
+| Record | `vendor/theme-adapter-source.json` |
+
+Regenerate that copy from a clean checkout of the tag:
+
+```bash
+php bin/bundle-theme-adapter.php
+```
+
+Pass the checkout path when it is not the sibling directory `../theme-adapter`. The script checks the tag, commit, and a clean worktree, then runs `packages/wordpress/bin/bundle.php`. It does not modify the Theme Adapter repository. Site owners do not run it, and they do not install Composer or a second plugin.
+
+`includes/ThemeAdapter.php` loads `vendor/theme-adapter/load.php` and enqueues the returned runtime for `theme="match"`. `includes/embed.css` maps the published `--razor-theme-*` properties onto the `--formlyx-*` properties `embed.js` already applies to the form. The page still loads `https://www.formlyx.com/embed.js`.
+
 ## Internationalization
 
 The text domain is `formlyx`. English is the source language. Brazilian Portuguese is planned and is not included. WordPress loads PHP translations just in time. The block editor script calls `wp_set_script_translations()` with the `formlyx` text domain and `languages/`.
@@ -157,7 +209,7 @@ wp i18n make-pot . languages/formlyx.pot --domain=formlyx --exclude=node_modules
 
 ## Packaging
 
-`npm run plugin-zip` uses `wp-scripts plugin-zip`, then `bin/filter-plugin-zip.py` removes development files. The package contains the bootstrap, `includes/`, the built block in `build/`, `readme.txt`, and `license.txt`. Install that zip from Plugins → Add New → Upload Plugin.
+`npm run plugin-zip` uses `wp-scripts plugin-zip`, then `bin/filter-plugin-zip.py` removes development files and adds `vendor/theme-adapter/`. wp-scripts does not pick up that directory on its own. The package contains the bootstrap, `includes/`, the bundled Theme Adapter, `vendor/theme-adapter-source.json`, the built block in `build/`, `readme.txt`, and `license.txt`. Install that zip from Plugins → Add New → Upload Plugin.
 
 There is no deploy workflow and no WordPress.org SVN publishing.
 

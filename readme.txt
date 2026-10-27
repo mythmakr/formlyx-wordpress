@@ -4,7 +4,7 @@ Tags: forms
 Requires at least: 6.7
 Tested up to: 7.1
 Stable tag: 1.0.0
-Requires PHP: 7.4
+Requires PHP: 8.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,7 +20,7 @@ The site needs HTTPS. HTTP works only on localhost. The connection can be checke
 
 In the block editor, insert the Formlyx Form block and choose a published form, or enter its form ID. A public form can be embedded by ID without connecting the site. The form picker needs the connection.
 
-The shortcode is `[formlyx id="FORM_ID"]`. An optional theme attribute accepts `auto`, `light`, `dark`, `inherit`, or `unstyled`.
+The shortcode is `[formlyx id="FORM_ID"]`. An optional theme attribute accepts `auto`, `light`, `dark`, `inherit`, `unstyled`, or `match`. `match` is Match WordPress Theme. It styles the hosted form from this site's active theme and does not change the appearance saved in Formlyx.
 
 A page can contain more than one form. Published pages load `https://www.formlyx.com/embed.js` once. That script displays the form and sends the submission to Formlyx. It does not receive this site's connection tokens.
 
@@ -63,7 +63,7 @@ The form picker does. A published form that Formlyx allows the public to embed c
 
 = Which theme values work? =
 
-`auto`, `light`, `dark`, `inherit`, and `unstyled`. The default is `auto`.
+`auto`, `light`, `dark`, `inherit`, `unstyled`, and `match`. The default is `auto`. `match` applies the active WordPress theme to the hosted form. The form's saved Formlyx appearance stays in place for the other values.
 
 = Why does the editor not show the live form? =
 
@@ -86,6 +86,7 @@ The WordPress.org contributor is razorsoftinc.
 = 1.0.0 =
 * Connect, reconnect, and disconnect a Formlyx account from Settings → Formlyx.
 * Embed a published form with the Formlyx Form block or the `[formlyx]` shortcode.
+* Match WordPress Theme styles that hosted form from the active theme. PHP 8.1 or newer is required.
 
 == Upgrade Notice ==
 

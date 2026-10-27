@@ -22,16 +22,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 final class Renderer {
 
 	/**
-	 * Theme values the hosted embed script accepts.
+	 * Appearance values stored for a block or shortcode.
 	 *
-	 * `formlyx` is an alias the script treats as `auto`. Anything else also
-	 * falls back to `auto` inside embed.js; this plugin writes `auto` instead
-	 * of passing an unknown value through.
+	 * `auto`, `light`, `dark`, `inherit`, and `unstyled` are values embed.js
+	 * understands. `match` is Match WordPress Theme. embed.js treats that
+	 * unrecognized value as `auto`, so saved Formlyx tokens remain the
+	 * fallback while this plugin's CSS variables override them. `formlyx` is
+	 * an alias the script treats as `auto`. Anything else is stored as `auto`.
 	 *
 	 * @since 1.0.0
 	 * @var string[]
 	 */
-	public const THEMES = array( 'auto', 'light', 'dark', 'inherit', 'unstyled' );
+	public const THEMES = array( 'auto', 'light', 'dark', 'inherit', 'unstyled', 'match' );
 
 	/**
 	 * Whether a string can be placed in data-form-id.
@@ -50,7 +52,7 @@ final class Renderer {
 	}
 
 	/**
-	 * Map a theme attribute to a value embed.js understands.
+	 * Map a theme attribute to a stored appearance value.
 	 *
 	 * @since 1.0.0
 	 *
@@ -123,12 +125,13 @@ final class Renderer {
 			return '';
 		}
 
-		Embed::enqueue();
+		$theme = self::theme( $theme );
+		Embed::enqueue( $theme );
 
 		return sprintf(
 			'<div class="formlyx-embed" data-form-id="%1$s" data-theme="%2$s"></div>',
 			esc_attr( $id ),
-			esc_attr( self::theme( $theme ) )
+			esc_attr( $theme )
 		);
 	}
 }

@@ -19,6 +19,7 @@ use Formlyx\Plugin;
 use Formlyx\Privacy;
 use Formlyx\Renderer;
 use Formlyx\Storage;
+use Formlyx\ThemeAdapter;
 use Formlyx\TokenManager;
 use PHPUnit\Framework\TestCase;
 
@@ -319,6 +320,7 @@ final class EmbedTest extends TestCase {
 		$this->assertSame( 'auto', Renderer::theme( 'formlyx' ) );
 		$this->assertSame( 'light', Renderer::theme( 'LIGHT' ) );
 		$this->assertSame( 'unstyled', Renderer::theme( 'unstyled' ) );
+		$this->assertSame( 'match', Renderer::theme( 'MATCH' ) );
 		$this->assertSame( 'auto', Renderer::theme( 'styled' ) );
 	}
 
@@ -421,6 +423,9 @@ final class EmbedTest extends TestCase {
 			'includes/FormsEndpoint.php',
 			'includes/Blocks.php',
 			'includes/embed.css',
+			'includes/ThemeAdapter.php',
+			'vendor/theme-adapter/load.php',
+			'vendor/theme-adapter-source.json',
 			'src/block.json',
 			'src/index.js',
 			'src/edit.js',

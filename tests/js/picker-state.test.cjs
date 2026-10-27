@@ -26,11 +26,19 @@ const {
 test( 'theme values match the embed script', () => {
 	assert.strictEqual(
 		JSON.stringify( THEMES ),
-		JSON.stringify( [ 'auto', 'light', 'dark', 'inherit', 'unstyled' ] )
+		JSON.stringify( [
+			'auto',
+			'light',
+			'dark',
+			'inherit',
+			'unstyled',
+			'match',
+		] )
 	);
 	assert.strictEqual( normalizeTheme( 'LIGHT' ), 'light' );
 	assert.strictEqual( normalizeTheme( 'formlyx' ), 'auto' );
 	assert.strictEqual( normalizeTheme( 'styled' ), 'auto' );
+	assert.strictEqual( normalizeTheme( 'MATCH' ), 'match' );
 } );
 
 test( 'form ids accept the embed character set', () => {

@@ -1,0 +1,8 @@
+{
+    "package": "razorsoft/wordpress-theme-adapter",
+    "version": "0.1.0",
+    "tag": "v0.1.0",
+    "commit": "02a1354e42a53c23ae0f3e2eb0c1e088f8619577",
+    "repository": "https://github.com/razorsoftinc/theme-adapter",
+    "bundler": "packages/wordpress/bin/bundle.php"
+}

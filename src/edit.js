@@ -31,6 +31,7 @@ const THEME_OPTIONS = [
 	{ label: __( 'Dark', 'formlyx' ), value: 'dark' },
 	{ label: __( 'Inherit', 'formlyx' ), value: 'inherit' },
 	{ label: __( 'Unstyled', 'formlyx' ), value: 'unstyled' },
+	{ label: __( 'Match WordPress Theme', 'formlyx' ), value: 'match' },
 ];
 
 /**
@@ -175,9 +176,17 @@ export default function Edit( { attributes, setAttributes } ) {
 			<InspectorControls>
 				<PanelBody title={ __( 'Formlyx form', 'formlyx' ) }>
 					<SelectControl
-						label={ __( 'Theme', 'formlyx' ) }
+						label={ __( 'Appearance', 'formlyx' ) }
 						value={ normalizeTheme( theme ) }
 						options={ THEME_OPTIONS }
+						help={
+							normalizeTheme( theme ) === 'match'
+								? __(
+										"Uses this site's theme on the hosted form. The appearance saved in Formlyx stays unchanged.",
+										'formlyx'
+									)
+								: undefined
+						}
 						onChange={ ( value ) =>
 							setAttributes( { theme: normalizeTheme( value ) } )
 						}

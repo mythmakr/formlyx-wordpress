@@ -2,7 +2,14 @@
  * Form picker rules shared with tests.
  */
 
-export const THEMES = [ 'auto', 'light', 'dark', 'inherit', 'unstyled' ];
+export const THEMES = [
+	'auto',
+	'light',
+	'dark',
+	'inherit',
+	'unstyled',
+	'match',
+];
 
 /**
  * Whether a value can be stored as a Formlyx form id.
@@ -15,7 +22,7 @@ export function isFormId( value ) {
 }
 
 /**
- * Map a theme to a value the hosted embed script accepts.
+ * Map a theme to a stored appearance value.
  *
  * @param {string} theme Requested theme.
  * @return {string} Theme attribute.
