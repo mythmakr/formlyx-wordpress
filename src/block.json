@@ -6,7 +6,7 @@
 	"category": "widgets",
 	"description": "Embed a published Formlyx form on your website.",
 	"keywords": [ "form", "formlyx" ],
-	"textdomain": "formlyx",
+	"textdomain": "formlyx-forms",
 	"attributes": {
 		"formId": {
 			"type": "string",

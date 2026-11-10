@@ -48,7 +48,7 @@ final class BootstrapTest extends TestCase {
 	 * @return void
 	 */
 	public function test_bootstrap_loads_plugin(): void {
-		$this->assertSame( '1.0.0', FORMLYX_VERSION );
+		$this->assertSame( '1.0.3', FORMLYX_VERSION );
 		$this->assertFileExists( FORMLYX_PLUGIN_FILE );
 		$this->assertTrue( class_exists( Plugin::class ) );
 

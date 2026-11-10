@@ -93,9 +93,22 @@ export function embedNoticeStatus( state ) {
 /**
  * Whether the editor should offer the one-site approval action.
  *
- * @param {string} state Server state.
- * @return {boolean} True only when this site still needs approval.
+ * @param {string}  state           Server state.
+ * @param {boolean} canApproveEmbed Whether the current user may approve.
+ * @return {boolean} True only when this site still needs approval and the
+ *                   current user is allowed to change Formlyx configuration.
  */
-export function embedShowsApproval( state ) {
-	return state === 'approval_required';
+export function embedShowsApproval( state, canApproveEmbed = true ) {
+	return state === 'approval_required' && !! canApproveEmbed;
+}
+
+/**
+ * Whether an administrator must approve embedding for the current user.
+ *
+ * @param {string}  state           Server state.
+ * @param {boolean} canApproveEmbed Whether the current user may approve.
+ * @return {boolean} True when approval is required but this user cannot do it.
+ */
+export function embedNeedsAdministrator( state, canApproveEmbed = true ) {
+	return state === 'approval_required' && ! canApproveEmbed;
 }

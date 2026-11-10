@@ -286,7 +286,7 @@ final class EmbedTest extends TestCase {
 		Blocks::register_content();
 		$this->assertSame( array( Renderer::class, 'render_block' ), $GLOBALS['formlyx_test_blocks'][0][1]['render_callback'] );
 		$this->assertArrayHasKey( 'formlyx', $GLOBALS['formlyx_test_shortcodes'] );
-		$this->assertSame( 'formlyx', $GLOBALS['formlyx_test_script_translations'][0][1] );
+		$this->assertSame( 'formlyx-forms', $GLOBALS['formlyx_test_script_translations'][0][1] );
 		$this->assertStringNotContainsString( 'access_token', $GLOBALS['formlyx_test_inline_scripts'][0][1] );
 	}
 

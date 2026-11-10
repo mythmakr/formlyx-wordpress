@@ -1,4 +1,5 @@
 /node_modules/
+/.tmp-plugin-check/
 /vendor/*
 !/vendor/theme-adapter/
 !/vendor/theme-adapter-source.json
@@ -12,6 +13,7 @@ phpcs-cache.json
 .DS_Store
 *.log
 formlyx.zip
+formlyx-forms.zip
 /wordpress/
 /tests/php/tmp/
 /video/wordpress-walkthrough/node_modules/

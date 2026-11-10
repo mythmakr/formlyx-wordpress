@@ -8,7 +8,7 @@ permissions:
   contents: read
 
 env:
-  COMPOSER_ROOT_VERSION: "1.0.0"
+  COMPOSER_ROOT_VERSION: "1.0.3"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -129,14 +129,18 @@ jobs:
 
       - name: Confirm the package excludes development files
         run: |
-          unzip -l formlyx.zip > zip-list.txt
+          unzip -l formlyx-forms.zip > zip-list.txt
           cat zip-list.txt
-          if grep -E 'node_modules/|/vendor/|/tests/|/\.github/|/src/|composer\.(json|lock)|package(-lock)?\.json|README\.md|\.wp-env|\.gitkeep|\.map$' zip-list.txt | grep -v 'formlyx/vendor/theme-adapter/'; then
+          if grep -E 'node_modules/|/tests/|/\.github/|composer\.(json|lock)|package(-lock)?\.json|\.wp-env|\.gitkeep|\.map$' zip-list.txt | grep -v 'formlyx-forms/vendor/theme-adapter/'; then
             echo "Plugin package contains development files." >&2
             exit 1
           fi
-          for required in formlyx.php uninstall.php readme.txt license.txt includes/Plugin.php includes/Renderer.php includes/Blocks.php includes/ThemeAdapter.php includes/embed.css vendor/theme-adapter/load.php vendor/theme-adapter/src/V0_1_0/Adapter.php vendor/theme-adapter/assets/detect.js vendor/theme-adapter/LICENSE vendor/theme-adapter-source.json build/block.json build/index.js build/index.asset.php; do
-            grep -q "formlyx/${required}" zip-list.txt || {
+          if grep -E '/vendor/' zip-list.txt | grep -v 'formlyx-forms/vendor/theme-adapter' ; then
+            echo "Plugin package contains unexpected vendor files." >&2
+            exit 1
+          fi
+          for required in formlyx.php uninstall.php readme.txt license.txt includes/Plugin.php includes/Renderer.php includes/Blocks.php includes/ThemeAdapter.php includes/embed.css vendor/theme-adapter/load.php vendor/theme-adapter/src/V0_1_0/Adapter.php vendor/theme-adapter/assets/detect.js vendor/theme-adapter/LICENSE vendor/theme-adapter-source.json build/block.json build/index.js build/index.asset.php languages/formlyx-forms.pot src/index.js src/edit.js src/block.json; do
+            grep -q "formlyx-forms/${required}" zip-list.txt || {
               echo "Plugin package is missing ${required}." >&2
               exit 1
             }
@@ -163,10 +167,10 @@ jobs:
 
       - name: Unpack the plugin
         run: |
-          unzip -q formlyx.zip -d plugin-build
-          test -f plugin-build/formlyx/formlyx.php
+          unzip -q formlyx-forms.zip -d plugin-build
+          test -f plugin-build/formlyx-forms/formlyx.php
 
       - name: Run Plugin Check
         uses: wordpress/plugin-check-action@v1
         with:
-          build-dir: plugin-build/formlyx
+          build-dir: plugin-build/formlyx-forms

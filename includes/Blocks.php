@@ -74,7 +74,8 @@ final class Blocks {
 
 		$settings = wp_json_encode(
 			array(
-				'settingsUrl' => admin_url( 'options-general.php?page=formlyx' ),
+				'settingsUrl'     => admin_url( 'options-general.php?page=formlyx' ),
+				'canApproveEmbed' => current_user_can( 'manage_options' ),
 			)
 		);
 		if ( ! is_string( $settings ) ) {
@@ -85,7 +86,7 @@ final class Blocks {
 			if ( ! is_string( $handle ) || '' === $handle ) {
 				continue;
 			}
-			wp_set_script_translations( $handle, 'formlyx', dirname( __DIR__ ) . '/languages' );
+			wp_set_script_translations( $handle, 'formlyx-forms', dirname( __DIR__ ) . '/languages' );
 			wp_add_inline_script( $handle, 'var formlyxEditor = ' . $settings . ';', 'before' );
 		}
 	}

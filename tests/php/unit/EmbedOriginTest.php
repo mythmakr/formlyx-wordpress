@@ -12,6 +12,7 @@ namespace Formlyx\Tests\Unit;
 use Formlyx\Api;
 use Formlyx\EmbedAuthorization;
 use Formlyx\EmbedOriginEndpoint;
+use Formlyx\FormsEndpoint;
 use Formlyx\Http;
 use Formlyx\SiteOrigin;
 use Formlyx\Storage;
@@ -40,6 +41,8 @@ final class EmbedOriginTest extends TestCase {
 		$GLOBALS['formlyx_http_queue']      = array();
 		$GLOBALS['formlyx_test_routes']     = array();
 		$GLOBALS['formlyx_test_home_url']   = 'https://example.test/';
+		$GLOBALS['formlyx_test_caps']       = array();
+		$GLOBALS['formlyx_test_can_manage'] = false;
 		Http::set_transport(
 			static function ( $method, $url, $args ) {
 				$GLOBALS['formlyx_http_log'][] = array( $method, $url, $args );
@@ -329,21 +332,44 @@ final class EmbedOriginTest extends TestCase {
 	}
 
 	/**
-	 * Editors reach the route, and the route does not accept an origin argument.
+	 * Status stays editor-readable; approval requires manage_options.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @return void
 	 */
-	public function test_route_uses_the_editor_permission(): void {
+	public function test_route_splits_status_and_approval_permissions(): void {
 		EmbedOriginEndpoint::register();
 		$this->assertSame( 'formlyx/v1', $GLOBALS['formlyx_test_routes'][0][0] );
 		$this->assertSame( '/forms/(?P<id>[A-Za-z0-9_-]+)/embed-site', $GLOBALS['formlyx_test_routes'][0][1] );
 		$methods = $GLOBALS['formlyx_test_routes'][0][2];
 		$this->assertSame( 'GET', $methods[0]['methods'] );
+		$this->assertSame( array( FormsEndpoint::class, 'permission' ), $methods[0]['permission_callback'] );
 		$this->assertSame( 'POST', $methods[1]['methods'] );
+		$this->assertSame( array( EmbedOriginEndpoint::class, 'approve_permission' ), $methods[1]['permission_callback'] );
 		$this->assertArrayNotHasKey( 'origin', $methods[0] );
 		$this->assertArrayNotHasKey( 'origin', $methods[1] );
+	}
+
+	/**
+	 * Editors and authors cannot approve; administrators can.
+	 *
+	 * @since 1.0.3
+	 *
+	 * @return void
+	 */
+	public function test_approve_permission_requires_manage_options(): void {
+		$GLOBALS['formlyx_test_caps']       = array();
+		$GLOBALS['formlyx_test_can_manage'] = false;
+		$this->assertFalse( EmbedOriginEndpoint::approve_permission() );
+
+		$GLOBALS['formlyx_test_caps']['edit_posts'] = true;
+		$GLOBALS['formlyx_test_caps']['edit_pages'] = true;
+		$this->assertFalse( EmbedOriginEndpoint::approve_permission() );
+		$this->assertTrue( FormsEndpoint::permission() );
+
+		$GLOBALS['formlyx_test_can_manage'] = true;
+		$this->assertTrue( EmbedOriginEndpoint::approve_permission() );
 	}
 
 	/**

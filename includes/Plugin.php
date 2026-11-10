@@ -27,7 +27,7 @@ final class Plugin {
 	/**
 	 * Register plugin hooks.
 	 *
-	 * WordPress.org loads translations for the `formlyx` text domain just in
+	 * WordPress.org loads translations for the `formlyx-forms` text domain just in
 	 * time. The block editor script calls `wp_set_script_translations()` with
 	 * that text domain and `FORMLYX_PLUGIN_DIR . 'languages'`.
 	 *

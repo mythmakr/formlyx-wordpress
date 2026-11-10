@@ -1,6 +1,6 @@
 {
-	"name": "formlyx",
-	"version": "1.0.0",
+	"name": "formlyx-forms",
+	"version": "1.0.3",
 	"private": true,
 	"description": "Connect Formlyx to WordPress and embed hosted forms.",
 	"author": "RazorSoft, Inc.",
@@ -11,7 +11,7 @@
 	"scripts": {
 		"build": "wp-scripts build",
 		"check-engines": "wp-scripts check-engines",
-		"lint:js": "wp-scripts lint-js",
+		"lint:js": "wp-scripts lint-js src",
 		"plugin-zip": "wp-scripts plugin-zip && python3 bin/filter-plugin-zip.py",
 		"start": "wp-scripts start"
 	},

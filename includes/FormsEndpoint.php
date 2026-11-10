@@ -41,7 +41,7 @@ final class FormsEndpoint {
 				'permission_callback' => array( self::class, 'permission' ),
 				'args'                => array(
 					'refresh' => array(
-						'description' => __( 'Load a fresh form list.', 'formlyx' ),
+						'description' => __( 'Load a fresh form list.', 'formlyx-forms' ),
 						'type'        => 'boolean',
 						'default'     => false,
 					),
@@ -108,27 +108,27 @@ final class FormsEndpoint {
 		if ( 'disconnected' === $notice ) {
 			return new \WP_Error(
 				'formlyx_disconnected',
-				__( 'Connect Formlyx to select a form.', 'formlyx' ),
+				__( 'Connect Formlyx to select a form.', 'formlyx-forms' ),
 				array( 'status' => 409 )
 			);
 		}
 		if ( 'expired' === $notice || 'missing_scope' === $notice ) {
 			return new \WP_Error(
 				'formlyx_expired',
-				__( 'The Formlyx connection has expired. Reconnect from Settings → Formlyx.', 'formlyx' ),
+				__( 'The Formlyx connection has expired. Reconnect from Settings → Formlyx.', 'formlyx-forms' ),
 				array( 'status' => 401 )
 			);
 		}
 		if ( 'unreachable' === $notice || 'refresh_busy' === $notice ) {
 			return new \WP_Error(
 				'formlyx_unreachable',
-				__( 'Formlyx could not be reached. Try again in a moment.', 'formlyx' ),
+				__( 'Formlyx could not be reached. Try again in a moment.', 'formlyx-forms' ),
 				array( 'status' => 502 )
 			);
 		}
 		return new \WP_Error(
 			'formlyx_unavailable',
-			__( 'The form list could not be loaded.', 'formlyx' ),
+			__( 'The form list could not be loaded.', 'formlyx-forms' ),
 			array( 'status' => 502 )
 		);
 	}

@@ -1,6 +1,6 @@
 <?php
 /**
- * Editor routes for this site's embed permission.
+ * REST routes for this site's embed permission.
  *
  * @package Formlyx
  * @since   1.0.0
@@ -15,9 +15,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Proxies embed-origin checks for users who can edit content.
+ * Proxies embed-origin status to editors and approval to administrators.
  *
- * The browser supplies the form ID only. WordPress derives the origin.
+ * GET lets content editors learn whether this site may embed a form.
+ * POST changes Formlyx configuration for the connected account, so it
+ * requires `manage_options`. The browser supplies the form ID only.
+ * WordPress derives the origin.
  *
  * @since 1.0.0
  */
@@ -43,10 +46,24 @@ final class EmbedOriginEndpoint {
 				array(
 					'methods'             => 'POST',
 					'callback'            => array( self::class, 'approve' ),
-					'permission_callback' => array( FormsEndpoint::class, 'permission' ),
+					'permission_callback' => array( self::class, 'approve_permission' ),
 				),
 			)
 		);
+	}
+
+	/**
+	 * Whether the current user may approve this site as an embed origin.
+	 *
+	 * Approving updates Formlyx form configuration through the stored
+	 * connection, so only administrators with `manage_options` may do it.
+	 *
+	 * @since 1.0.3
+	 *
+	 * @return bool
+	 */
+	public static function approve_permission(): bool {
+		return current_user_can( 'manage_options' );
 	}
 
 	/**

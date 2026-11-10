@@ -30,10 +30,10 @@ final class AdminPage {
 	 */
 	public static function register_menu(): void {
 		add_options_page(
-			__( 'Formlyx', 'formlyx' ),
-			__( 'Formlyx', 'formlyx' ),
+			__( 'Formlyx', 'formlyx-forms' ),
+			__( 'Formlyx', 'formlyx-forms' ),
 			'manage_options',
-			'formlyx',
+			'formlyx-forms',
 			array( self::class, 'render' )
 		);
 	}
@@ -57,11 +57,11 @@ final class AdminPage {
 		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 		echo '<div class="wrap">';
-		echo '<h1>' . esc_html__( 'Formlyx', 'formlyx' ) . '</h1>';
+		echo '<h1>' . esc_html__( 'Formlyx', 'formlyx-forms' ) . '</h1>';
 		self::render_notice( $notice );
 
 		if ( ! ClientRegistration::is_allowed_callback( ClientRegistration::callback_url() ) ) {
-			echo '<div class="notice notice-warning"><p>' . esc_html__( 'This site needs HTTPS before it can connect to Formlyx. Local development can use HTTP on localhost.', 'formlyx' ) . '</p></div>';
+			echo '<div class="notice notice-warning"><p>' . esc_html__( 'This site needs HTTPS before it can connect to Formlyx. Local development can use HTTP on localhost.', 'formlyx-forms' ) . '</p></div>';
 		}
 
 		echo '<div class="card" style="max-width:40rem;padding:1.25rem 1.5rem;">';
@@ -153,7 +153,7 @@ final class AdminPage {
 	 */
 	public static function require_admin(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'Sorry, you are not allowed to manage Formlyx.', 'formlyx' ), '', array( 'response' => 403 ) );
+			wp_die( esc_html__( 'Sorry, you are not allowed to manage Formlyx.', 'formlyx-forms' ), '', array( 'response' => 403 ) );
 		}
 	}
 
@@ -168,35 +168,35 @@ final class AdminPage {
 	public static function notice_text( string $code ): string {
 		switch ( $code ) {
 			case 'connected':
-				return __( 'Your site is connected to Formlyx.', 'formlyx' );
+				return __( 'Your site is connected to Formlyx.', 'formlyx-forms' );
 			case 'checked':
-				return __( 'The Formlyx connection is working.', 'formlyx' );
+				return __( 'The Formlyx connection is working.', 'formlyx-forms' );
 			case 'disconnected':
-				return __( 'This site is disconnected, and Formlyx confirmed the access was removed.', 'formlyx' );
+				return __( 'This site is disconnected, and Formlyx confirmed the access was removed.', 'formlyx-forms' );
 			case 'disconnect_unconfirmed':
-				return __( 'This site is disconnected. Formlyx did not confirm that access was removed. If the connection still appears in your Formlyx account, remove it there.', 'formlyx' );
+				return __( 'This site is disconnected. Formlyx did not confirm that access was removed. If the connection still appears in your Formlyx account, remove it there.', 'formlyx-forms' );
 			case 'denied':
-				return __( 'The connection was cancelled. Nothing was changed.', 'formlyx' );
+				return __( 'The connection was cancelled. Nothing was changed.', 'formlyx-forms' );
 			case 'expired_link':
-				return __( 'That connection attempt expired. Start again.', 'formlyx' );
+				return __( 'That connection attempt expired. Start again.', 'formlyx-forms' );
 			case 'invalid_link':
-				return __( 'That connection attempt is no longer valid. Start again.', 'formlyx' );
+				return __( 'That connection attempt is no longer valid. Start again.', 'formlyx-forms' );
 			case 'invalid_issuer':
-				return __( 'The connection response did not come from Formlyx. Nothing was saved.', 'formlyx' );
+				return __( 'The connection response did not come from Formlyx. Nothing was saved.', 'formlyx-forms' );
 			case 'https_required':
-				return __( 'Connect from an HTTPS site. HTTP is only available on localhost.', 'formlyx' );
+				return __( 'Connect from an HTTPS site. HTTP is only available on localhost.', 'formlyx-forms' );
 			case 'registration_failed':
-				return __( 'Formlyx could not start the connection. Try again in a few minutes.', 'formlyx' );
+				return __( 'Formlyx could not start the connection. Try again in a few minutes.', 'formlyx-forms' );
 			case 'missing_scope':
-				return __( 'Formlyx did not allow this site to read forms. Connect again and allow access.', 'formlyx' );
+				return __( 'Formlyx did not allow this site to read forms. Connect again and allow access.', 'formlyx-forms' );
 			case 'expired':
-				return __( 'Formlyx needs you to connect again. The previous approval is no longer valid.', 'formlyx' );
+				return __( 'Formlyx needs you to connect again. The previous approval is no longer valid.', 'formlyx-forms' );
 			case 'unreachable':
-				return __( 'Formlyx could not be reached. Your connection is still saved.', 'formlyx' );
+				return __( 'Formlyx could not be reached. Your connection is still saved.', 'formlyx-forms' );
 			case 'refresh_busy':
-				return __( 'Formlyx is updating the connection. Try again in a moment.', 'formlyx' );
+				return __( 'Formlyx is updating the connection. Try again in a moment.', 'formlyx-forms' );
 			case 'connect_failed':
-				return __( 'Formlyx could not finish connecting. Try again.', 'formlyx' );
+				return __( 'Formlyx could not finish connecting. Try again.', 'formlyx-forms' );
 			default:
 				return '';
 		}
@@ -230,14 +230,14 @@ final class AdminPage {
 	 * @return void
 	 */
 	private static function render_disconnected(): void {
-		echo '<h2>' . esc_html__( 'Connect your site', 'formlyx' ) . '</h2>';
-		echo '<p>' . esc_html__( 'Connect your WordPress website to Formlyx to select and embed your published forms.', 'formlyx' ) . '</p>';
+		echo '<h2>' . esc_html__( 'Connect your site', 'formlyx-forms' ) . '</h2>';
+		echo '<p>' . esc_html__( 'Connect your WordPress website to Formlyx to select and embed your published forms.', 'formlyx-forms' ) . '</p>';
 		echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';
 		wp_nonce_field( 'formlyx_connect' );
 		echo '<input type="hidden" name="action" value="formlyx_connect" />';
 		echo '<p>';
-		echo '<button type="submit" class="button button-primary" name="formlyx_entry" value="authorize">' . esc_html__( 'Connect to Formlyx', 'formlyx' ) . '</button> ';
-		echo '<button type="submit" class="button" name="formlyx_entry" value="signup">' . esc_html__( 'Create a Formlyx account', 'formlyx' ) . '</button>';
+		echo '<button type="submit" class="button button-primary" name="formlyx_entry" value="authorize">' . esc_html__( 'Connect to Formlyx', 'formlyx-forms' ) . '</button> ';
+		echo '<button type="submit" class="button" name="formlyx_entry" value="signup">' . esc_html__( 'Create a Formlyx account', 'formlyx-forms' ) . '</button>';
 		echo '</p></form>';
 	}
 
@@ -250,21 +250,21 @@ final class AdminPage {
 	 * @return void
 	 */
 	private static function render_connected( array $connection ): void {
-		echo '<h2>' . esc_html__( 'Connected to Formlyx', 'formlyx' ) . '</h2>';
-		echo '<p><strong>' . esc_html__( 'Connection status', 'formlyx' ) . ':</strong> ' . esc_html( self::status_label( (string) $connection['status'] ) ) . '</p>';
+		echo '<h2>' . esc_html__( 'Connected to Formlyx', 'formlyx-forms' ) . '</h2>';
+		echo '<p><strong>' . esc_html__( 'Connection status', 'formlyx-forms' ) . ':</strong> ' . esc_html( self::status_label( (string) $connection['status'] ) ) . '</p>';
 
 		if ( '' !== $connection['workspace_name'] ) {
-			echo '<p><strong>' . esc_html__( 'Workspace', 'formlyx' ) . ':</strong> ' . esc_html( (string) $connection['workspace_name'] ) . '</p>';
+			echo '<p><strong>' . esc_html__( 'Workspace', 'formlyx-forms' ) . ':</strong> ' . esc_html( (string) $connection['workspace_name'] ) . '</p>';
 		}
 		if ( '' !== $connection['workspace_email'] ) {
-			echo '<p><strong>' . esc_html__( 'Account email', 'formlyx' ) . ':</strong> ' . esc_html( (string) $connection['workspace_email'] ) . '</p>';
+			echo '<p><strong>' . esc_html__( 'Account email', 'formlyx-forms' ) . ':</strong> ' . esc_html( (string) $connection['workspace_email'] ) . '</p>';
 		}
 
 		if ( (int) $connection['checked_at'] > 0 ) {
 			echo '<p>' . esc_html(
 				sprintf(
 					/* translators: %s: date and time of the last successful check. */
-					__( 'Last successful connection check: %s', 'formlyx' ),
+					__( 'Last successful connection check: %s', 'formlyx-forms' ),
 					wp_date( 'Y-m-d H:i', (int) $connection['checked_at'] )
 				)
 			) . '</p>';
@@ -280,19 +280,19 @@ final class AdminPage {
 		wp_nonce_field( 'formlyx_connect' );
 		echo '<input type="hidden" name="action" value="formlyx_connect" />';
 		echo '<input type="hidden" name="formlyx_entry" value="authorize" />';
-		echo '<button type="submit" class="button button-primary">' . esc_html__( 'Reconnect', 'formlyx' ) . '</button>';
+		echo '<button type="submit" class="button button-primary">' . esc_html__( 'Reconnect', 'formlyx-forms' ) . '</button>';
 		echo '</form>';
 
 		echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" style="display:inline-block;margin-right:0.5rem;">';
 		wp_nonce_field( 'formlyx_check' );
 		echo '<input type="hidden" name="action" value="formlyx_check" />';
-		echo '<button type="submit" class="button">' . esc_html__( 'Check connection', 'formlyx' ) . '</button>';
+		echo '<button type="submit" class="button">' . esc_html__( 'Check connection', 'formlyx-forms' ) . '</button>';
 		echo '</form>';
 
 		echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" style="display:inline-block;">';
 		wp_nonce_field( 'formlyx_disconnect' );
 		echo '<input type="hidden" name="action" value="formlyx_disconnect" />';
-		echo '<button type="submit" class="button">' . esc_html__( 'Disconnect', 'formlyx' ) . '</button>';
+		echo '<button type="submit" class="button">' . esc_html__( 'Disconnect', 'formlyx-forms' ) . '</button>';
 		echo '</form>';
 	}
 
@@ -307,13 +307,13 @@ final class AdminPage {
 	private static function status_label( string $status ): string {
 		switch ( $status ) {
 			case 'connected':
-				return __( 'Connected', 'formlyx' );
+				return __( 'Connected', 'formlyx-forms' );
 			case 'unreachable':
-				return __( 'Temporarily unreachable', 'formlyx' );
+				return __( 'Temporarily unreachable', 'formlyx-forms' );
 			case 'expired':
-				return __( 'Needs reconnecting', 'formlyx' );
+				return __( 'Needs reconnecting', 'formlyx-forms' );
 			default:
-				return __( 'Not connected', 'formlyx' );
+				return __( 'Not connected', 'formlyx-forms' );
 		}
 	}
 }

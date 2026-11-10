@@ -17,6 +17,7 @@ import { useSelect } from '@wordpress/data';
 import apiFetch from '@wordpress/api-fetch';
 import { useCallback, useEffect, useState } from '@wordpress/element';
 import {
+	embedNeedsAdministrator,
 	embedNoticeStatus,
 	embedShowsApproval,
 	filterForms,
@@ -26,12 +27,12 @@ import {
 } from './picker-state';
 
 const THEME_OPTIONS = [
-	{ label: __( 'Auto', 'formlyx' ), value: 'auto' },
-	{ label: __( 'Light', 'formlyx' ), value: 'light' },
-	{ label: __( 'Dark', 'formlyx' ), value: 'dark' },
-	{ label: __( 'Inherit', 'formlyx' ), value: 'inherit' },
-	{ label: __( 'Unstyled', 'formlyx' ), value: 'unstyled' },
-	{ label: __( 'Match WordPress Theme', 'formlyx' ), value: 'match' },
+	{ label: __( 'Auto', 'formlyx-forms' ), value: 'auto' },
+	{ label: __( 'Light', 'formlyx-forms' ), value: 'light' },
+	{ label: __( 'Dark', 'formlyx-forms' ), value: 'dark' },
+	{ label: __( 'Inherit', 'formlyx-forms' ), value: 'inherit' },
+	{ label: __( 'Unstyled', 'formlyx-forms' ), value: 'unstyled' },
+	{ label: __( 'Match WordPress Theme', 'formlyx-forms' ), value: 'match' },
 ];
 
 /**
@@ -44,6 +45,18 @@ function settingsUrl() {
 		return formlyxEditor.settingsUrl;
 	}
 	return '';
+}
+
+/**
+ * Whether the current user may approve this site as an embed origin.
+ *
+ * @return {boolean} True for administrators with manage_options.
+ */
+function canApproveEmbed() {
+	if ( typeof formlyxEditor !== 'undefined' ) {
+		return !! formlyxEditor.canApproveEmbed;
+	}
+	return false;
 }
 
 /**
@@ -111,7 +124,7 @@ export default function Edit( { attributes, setAttributes } ) {
 								state: 'unavailable',
 								message: __(
 									'Formlyx could not check embed permission for this site.',
-									'formlyx'
+									'formlyx-forms'
 								),
 								authorized: false,
 							}
@@ -122,7 +135,7 @@ export default function Edit( { attributes, setAttributes } ) {
 					state: 'unavailable',
 					message: __(
 						'Formlyx could not check embed permission for this site.',
-						'formlyx'
+						'formlyx-forms'
 					),
 					authorized: false,
 				} );
@@ -150,19 +163,31 @@ export default function Edit( { attributes, setAttributes } ) {
 								state: 'unavailable',
 								message: __(
 									'Formlyx could not allow this site.',
-									'formlyx'
+									'formlyx-forms'
 								),
 								authorized: false,
 							}
 				);
 			} )
-			.catch( () => {
+			.catch( ( error ) => {
+				const httpStatus =
+					error && error.data && error.data.status
+						? error.data.status
+						: 0;
+				const forbidden =
+					( error && error.code === 'rest_forbidden' ) ||
+					httpStatus === 403;
 				setEmbed( {
 					state: 'unavailable',
-					message: __(
-						'Formlyx could not allow this site.',
-						'formlyx'
-					),
+					message: forbidden
+						? __(
+								'An administrator must allow embedding on this site.',
+								'formlyx-forms'
+							)
+						: __(
+								'Formlyx could not allow this site.',
+								'formlyx-forms'
+							),
 					authorized: false,
 				} );
 			} )
@@ -174,16 +199,16 @@ export default function Edit( { attributes, setAttributes } ) {
 	return (
 		<div { ...blockProps }>
 			<InspectorControls>
-				<PanelBody title={ __( 'Formlyx form', 'formlyx' ) }>
+				<PanelBody title={ __( 'Formlyx form', 'formlyx-forms' ) }>
 					<SelectControl
-						label={ __( 'Appearance', 'formlyx' ) }
+						label={ __( 'Appearance', 'formlyx-forms' ) }
 						value={ normalizeTheme( theme ) }
 						options={ THEME_OPTIONS }
 						help={
 							normalizeTheme( theme ) === 'match'
 								? __(
 										"Uses this site's theme on the hosted form. The appearance saved in Formlyx stays unchanged.",
-										'formlyx'
+										'formlyx-forms'
 									)
 								: undefined
 						}
@@ -196,10 +221,13 @@ export default function Edit( { attributes, setAttributes } ) {
 			{ status === 'loading' && <Spinner /> }
 			{ status === 'disconnected' && (
 				<Notice status="warning" isDismissible={ false }>
-					{ __( 'Connect Formlyx to select a form.', 'formlyx' ) }{ ' ' }
+					{ __(
+						'Connect Formlyx to select a form.',
+						'formlyx-forms'
+					) }{ ' ' }
 					{ settingsUrl() && (
 						<a href={ settingsUrl() }>
-							{ __( 'Settings → Formlyx', 'formlyx' ) }
+							{ __( 'Settings → Formlyx', 'formlyx-forms' ) }
 						</a>
 					) }
 				</Notice>
@@ -208,31 +236,34 @@ export default function Edit( { attributes, setAttributes } ) {
 				<Notice status="warning" isDismissible={ false }>
 					{ __(
 						'The Formlyx connection has expired. Reconnect from Settings → Formlyx.',
-						'formlyx'
+						'formlyx-forms'
 					) }{ ' ' }
 					{ settingsUrl() && (
 						<a href={ settingsUrl() }>
-							{ __( 'Settings → Formlyx', 'formlyx' ) }
+							{ __( 'Settings → Formlyx', 'formlyx-forms' ) }
 						</a>
 					) }
 				</Notice>
 			) }
 			{ status === 'error' && (
 				<Notice status="error" isDismissible={ false }>
-					{ __( 'The form list could not be loaded.', 'formlyx' ) }
+					{ __(
+						'The form list could not be loaded.',
+						'formlyx-forms'
+					) }
 				</Notice>
 			) }
 			{ status === 'ready' && forms.length === 0 && (
 				<Notice status="info" isDismissible={ false }>
 					{ __(
 						'No published forms are available for embedding.',
-						'formlyx'
+						'formlyx-forms'
 					) }
 				</Notice>
 			) }
 			{ status === 'ready' && forms.length > 0 && (
 				<ComboboxControl
-					label={ __( 'Published form', 'formlyx' ) }
+					label={ __( 'Published form', 'formlyx-forms' ) }
 					value={ selected ? formId : '' }
 					options={ options }
 					onChange={ ( value ) =>
@@ -241,18 +272,18 @@ export default function Edit( { attributes, setAttributes } ) {
 					onFilterValueChange={ setQuery }
 					help={ __(
 						'Search uses the forms already loaded.',
-						'formlyx'
+						'formlyx-forms'
 					) }
 				/>
 			) }
 			{ status !== 'loading' && (
 				<TextControl
-					label={ __( 'Form ID', 'formlyx' ) }
+					label={ __( 'Form ID', 'formlyx-forms' ) }
 					value={ formId }
 					onChange={ ( value ) => setAttributes( { formId: value } ) }
 					help={ __(
 						'Enter a Formlyx form ID when it is not in the list. A public form does not require a connection.',
-						'formlyx'
+						'formlyx-forms'
 					) }
 				/>
 			) }
@@ -260,7 +291,7 @@ export default function Edit( { attributes, setAttributes } ) {
 				<Notice status="warning" isDismissible={ false }>
 					{ __(
 						'Use the form ID from Formlyx. It can contain letters, numbers, hyphens, and underscores.',
-						'formlyx'
+						'formlyx-forms'
 					) }
 				</Notice>
 			) }
@@ -270,14 +301,14 @@ export default function Edit( { attributes, setAttributes } ) {
 						variant="secondary"
 						onClick={ () => loadForms( true ) }
 					>
-						{ __( 'Refresh forms', 'formlyx' ) }
+						{ __( 'Refresh forms', 'formlyx-forms' ) }
 					</Button>{ ' ' }
 					<Button
 						variant="tertiary"
 						disabled={ formId === '' }
 						onClick={ () => setAttributes( { formId: '' } ) }
 					>
-						{ __( 'Clear selection', 'formlyx' ) }
+						{ __( 'Clear selection', 'formlyx-forms' ) }
 					</Button>
 				</p>
 			) }
@@ -286,7 +317,7 @@ export default function Edit( { attributes, setAttributes } ) {
 					<Spinner />
 					{ __(
 						'Checking whether this site can embed the form.',
-						'formlyx'
+						'formlyx-forms'
 					) }
 				</p>
 			) }
@@ -298,7 +329,7 @@ export default function Edit( { attributes, setAttributes } ) {
 					>
 						{ embed.message }
 					</Notice>
-					{ embedShowsApproval( embed.state ) && (
+					{ embedShowsApproval( embed.state, canApproveEmbed() ) && (
 						<p>
 							<Button
 								variant="secondary"
@@ -308,9 +339,20 @@ export default function Edit( { attributes, setAttributes } ) {
 							>
 								{ __(
 									'Allow embedding on this site',
-									'formlyx'
+									'formlyx-forms'
 								) }
 							</Button>
+						</p>
+					) }
+					{ embedNeedsAdministrator(
+						embed.state,
+						canApproveEmbed()
+					) && (
+						<p>
+							{ __(
+								'An administrator must allow embedding on this site.',
+								'formlyx-forms'
+							) }
 						</p>
 					) }
 					{ ( embed.state === 'reconnect' ||
@@ -318,7 +360,10 @@ export default function Edit( { attributes, setAttributes } ) {
 						settingsUrl() && (
 							<p>
 								<a href={ settingsUrl() }>
-									{ __( 'Settings → Formlyx', 'formlyx' ) }
+									{ __(
+										'Settings → Formlyx',
+										'formlyx-forms'
+									) }
 								</a>
 							</p>
 						) }
@@ -329,7 +374,7 @@ export default function Edit( { attributes, setAttributes } ) {
 					<strong>
 						{ selected
 							? selected.name
-							: __( 'Formlyx form', 'formlyx' ) }
+							: __( 'Formlyx form', 'formlyx-forms' ) }
 					</strong>
 					{ selected && selected.description ? (
 						<p>{ selected.description }</p>
@@ -338,13 +383,13 @@ export default function Edit( { attributes, setAttributes } ) {
 					<p>
 						{ __(
 							'The live form appears on the published page. This editor shows a placeholder because the Formlyx embed script does not provide a way to start again inside the editor.',
-							'formlyx'
+							'formlyx-forms'
 						) }
 					</p>
 					{ previewLink ? (
 						<p>
 							<a href={ previewLink }>
-								{ __( 'Preview page', 'formlyx' ) }
+								{ __( 'Preview page', 'formlyx-forms' ) }
 							</a>
 						</p>
 					) : null }

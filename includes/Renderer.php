@@ -102,7 +102,7 @@ final class Renderer {
 				'theme' => 'auto',
 			),
 			is_array( $atts ) ? $atts : array(),
-			'formlyx'
+			'formlyx-forms'
 		);
 		$id    = isset( $atts['id'] ) ? (string) $atts['id'] : '';
 		$theme = isset( $atts['theme'] ) ? (string) $atts['theme'] : 'auto';

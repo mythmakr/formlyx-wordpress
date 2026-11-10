@@ -66,7 +66,7 @@ final class EmbedAuthorization {
 			return self::result(
 				'reconnect',
 				false,
-				__( 'Reconnect Formlyx to allow this site to embed forms.', 'formlyx' )
+				__( 'Reconnect Formlyx to allow this site to embed forms.', 'formlyx-forms' )
 			);
 		}
 
@@ -131,7 +131,7 @@ final class EmbedAuthorization {
 			return self::result(
 				'embed_disabled',
 				false,
-				__( 'Public embed is turned off for this form in Formlyx.', 'formlyx' )
+				__( 'Public embed is turned off for this form in Formlyx.', 'formlyx-forms' )
 			);
 		}
 
@@ -141,22 +141,22 @@ final class EmbedAuthorization {
 			return self::result(
 				'authorized',
 				true,
-				__( 'This form can be embedded on any site.', 'formlyx' )
+				__( 'This form can be embedded on any site.', 'formlyx-forms' )
 			);
 		}
 
 		if ( $authorized && ! empty( $data['added'] ) ) {
-			$message = __( 'This site can now embed this form. Its other allowed domains were kept, and embedding is still limited to those domains.', 'formlyx' );
+			$message = __( 'This site can now embed this form. Its other allowed domains were kept, and embedding is still limited to those domains.', 'formlyx-forms' );
 			if ( ! $published ) {
-				$message .= ' ' . __( 'Visitors can load it after the form is published.', 'formlyx' );
+				$message .= ' ' . __( 'Visitors can load it after the form is published.', 'formlyx-forms' );
 			}
 			return self::result( 'authorized', true, $message );
 		}
 
 		if ( $authorized ) {
-			$message = __( 'This site can already embed this form.', 'formlyx' );
+			$message = __( 'This site can already embed this form.', 'formlyx-forms' );
 			if ( ! $published ) {
-				$message .= ' ' . __( 'Visitors can load it after the form is published.', 'formlyx' );
+				$message .= ' ' . __( 'Visitors can load it after the form is published.', 'formlyx-forms' );
 			}
 			return self::result( 'authorized', true, $message );
 		}
@@ -165,14 +165,14 @@ final class EmbedAuthorization {
 			return self::result(
 				'approval_required',
 				false,
-				__( 'This form only allows specific sites. This WordPress site is not one of them yet.', 'formlyx' )
+				__( 'This form only allows specific sites. This WordPress site is not one of them yet.', 'formlyx-forms' )
 			);
 		}
 
 		return self::result(
 			'reconnect',
 			false,
-			__( 'Reconnect Formlyx to allow this site to embed forms.', 'formlyx' )
+			__( 'Reconnect Formlyx to allow this site to embed forms.', 'formlyx-forms' )
 		);
 	}
 
@@ -190,14 +190,14 @@ final class EmbedAuthorization {
 			return self::result(
 				'reconnect',
 				false,
-				__( 'The Formlyx connection has expired. Reconnect from Settings → Formlyx.', 'formlyx' )
+				__( 'The Formlyx connection has expired. Reconnect from Settings → Formlyx.', 'formlyx-forms' )
 			);
 		}
 		if ( 'INSUFFICIENT_SCOPE' === $error_code ) {
 			return self::result(
 				'reconnect',
 				false,
-				__( 'Reconnect Formlyx to allow this site to embed forms.', 'formlyx' )
+				__( 'Reconnect Formlyx to allow this site to embed forms.', 'formlyx-forms' )
 			);
 		}
 		if ( 'LOCAL_ORIGIN' === $error_code ) {
@@ -207,28 +207,28 @@ final class EmbedAuthorization {
 			return self::result(
 				'mismatch',
 				false,
-				__( 'This site address does not match the WordPress address used to connect Formlyx.', 'formlyx' )
+				__( 'This site address does not match the WordPress address used to connect Formlyx.', 'formlyx-forms' )
 			);
 		}
 		if ( 'EMBED_DISABLED' === $error_code ) {
 			return self::result(
 				'embed_disabled',
 				false,
-				__( 'Public embed is turned off for this form in Formlyx.', 'formlyx' )
+				__( 'Public embed is turned off for this form in Formlyx.', 'formlyx-forms' )
 			);
 		}
 		if ( 'FORM_NOT_FOUND' === $error_code ) {
 			return self::result(
 				'not_found',
 				false,
-				__( 'Formlyx could not find that form on the connected account.', 'formlyx' )
+				__( 'Formlyx could not find that form on the connected account.', 'formlyx-forms' )
 			);
 		}
 
 		return self::result(
 			'unavailable',
 			false,
-			__( 'Formlyx could not check embed permission for this site.', 'formlyx' )
+			__( 'Formlyx could not check embed permission for this site.', 'formlyx-forms' )
 		);
 	}
 
@@ -245,14 +245,14 @@ final class EmbedAuthorization {
 			return self::result(
 				'local_site',
 				false,
-				__( 'This WordPress site uses a local address, so Formlyx will not add it to the form.', 'formlyx' )
+				__( 'This WordPress site uses a local address, so Formlyx will not add it to the form.', 'formlyx-forms' )
 			);
 		}
 
 		return self::result(
 			'unavailable',
 			false,
-			__( 'Formlyx could not determine this site\'s public address.', 'formlyx' )
+			__( 'Formlyx could not determine this site\'s public address.', 'formlyx-forms' )
 		);
 	}
 
@@ -269,14 +269,14 @@ final class EmbedAuthorization {
 			return self::result(
 				'reconnect',
 				false,
-				__( 'Connect Formlyx to allow this site to embed forms.', 'formlyx' )
+				__( 'Connect Formlyx to allow this site to embed forms.', 'formlyx-forms' )
 			);
 		}
 
 		return self::result(
 			'reconnect',
 			false,
-			__( 'The Formlyx connection has expired. Reconnect from Settings → Formlyx.', 'formlyx' )
+			__( 'The Formlyx connection has expired. Reconnect from Settings → Formlyx.', 'formlyx-forms' )
 		);
 	}
 
@@ -308,7 +308,7 @@ final class EmbedAuthorization {
 	private static function invalid_form(): \WP_Error {
 		return new \WP_Error(
 			'formlyx_invalid_form',
-			__( 'Use the form ID from Formlyx. It can contain letters, numbers, hyphens, and underscores.', 'formlyx' ),
+			__( 'Use the form ID from Formlyx. It can contain letters, numbers, hyphens, and underscores.', 'formlyx-forms' ),
 			array( 'status' => 400 )
 		);
 	}

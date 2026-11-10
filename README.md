@@ -1,8 +1,8 @@
 # Formlyx Forms
 
-Official WordPress plugin for the hosted [Formlyx](https://www.formlyx.com) service. Formlyx stores forms and submissions. This repository is the free plugin intended for WordPress.org (`formlyx` slug).
+Official WordPress plugin for the hosted [Formlyx](https://www.formlyx.com) service. Formlyx stores forms and submissions. This repository is the free plugin intended for WordPress.org (`formlyx-forms` slug).
 
-Version 1.0.0 connects a WordPress site to a Formlyx account and embeds published forms with the Formlyx Form block or the `[formlyx]` shortcode.
+Version 1.0.3 connects a WordPress site to a Formlyx account and embeds published forms with the Formlyx Form block or the `[formlyx]` shortcode.
 
 ## Compatibility
 
@@ -34,7 +34,7 @@ Stay logged in to WordPress in the same browser while you approve access. The ca
 
 The plugin is a public OAuth client. It registers itself with `POST https://api.formlyx.com/oauth/register` (`token_endpoint_auth_method: none`) and reuses that registration until the callback URL changes. Formlyx does not offer an API to update or delete a registration, so a changed site URL creates a new client and the previous registration remains in Formlyx.
 
-Authorization uses the code flow with PKCE S256, scopes `forms:read` and `forms:embed`, and resource `https://api.formlyx.com/v1`. The plugin does not request the MCP resource or form-editing scopes. `forms:embed` lets an editor add this site's own address to one form. It does not allow every domain. A connection made before that scope existed can still list forms; approving a site requires reconnecting. The code verifier and tokens stay on the server. The browser only receives `code`, `state`, and `iss`. The editor never sends an origin: WordPress derives it from the site address.
+Authorization uses the code flow with PKCE S256, scopes `forms:read` and `forms:embed`, and resource `https://api.formlyx.com/v1`. The plugin does not request the MCP resource or form-editing scopes. `forms:embed` lets an administrator with `manage_options` add this site's own address to one form. It does not allow every domain. Editors can check embed status and select forms; approving a restricted origin requires an administrator. A connection made before that scope existed can still list forms; approving a site requires reconnecting. The code verifier and tokens stay on the server. The browser only receives `code`, `state`, and `iss`. The editor never sends an origin: WordPress derives it from the site address.
 
 Access tokens last about one hour. Refresh tokens last 30 days, and Formlyx rotates them. Refresh uses an `add_option()` lock named `formlyx_refresh_lock` so two requests do not rotate the same token. The lock expires after 30 seconds. A request that loses the lock waits briefly, then uses the token pair saved by the request that won. If the stored refresh token changed while a refresh was in flight, including when an administrator disconnected, that response is discarded.
 
@@ -199,7 +199,7 @@ Pass the checkout path when it is not the sibling directory `../theme-adapter`. 
 
 ## Internationalization
 
-The text domain is `formlyx`. English is the source language. Brazilian Portuguese is planned and is not included. WordPress loads PHP translations just in time. The block editor script calls `wp_set_script_translations()` with the `formlyx` text domain and `languages/`.
+The text domain is `formlyx-forms`. English is the source language. Brazilian Portuguese is planned and is not included. WordPress loads PHP translations just in time. The block editor script calls `wp_set_script_translations()` with the `formlyx-forms` text domain and `languages/`.
 
 `languages/formlyx.pot` is the source catalog. Regenerate it with WP-CLI:
 
@@ -209,7 +209,7 @@ wp i18n make-pot . languages/formlyx.pot --domain=formlyx --exclude=node_modules
 
 ## Packaging
 
-`npm run plugin-zip` uses `wp-scripts plugin-zip`, then `bin/filter-plugin-zip.py` removes development files and adds `vendor/theme-adapter/`. wp-scripts does not pick up that directory on its own. The package contains the bootstrap, `includes/`, the bundled Theme Adapter, `vendor/theme-adapter-source.json`, the built block in `build/`, `readme.txt`, and `license.txt`. Install that zip from Plugins → Add New → Upload Plugin.
+`npm run plugin-zip` uses `wp-scripts plugin-zip`, then `bin/filter-plugin-zip.py` removes development files, renames the archive root to `formlyx-forms/`, and adds `vendor/theme-adapter/` plus readable `src/` files. The package contains the bootstrap, `includes/`, the bundled Theme Adapter, `vendor/theme-adapter-source.json`, the built block in `build/`, readable Gutenberg source in `src/`, `readme.txt`, and `license.txt`. Install `formlyx-forms.zip` from Plugins → Add New → Upload Plugin.
 
 There is no deploy workflow and no WordPress.org SVN publishing.
 

@@ -3,16 +3,15 @@
  * Plugin Name:       Formlyx Forms
  * Plugin URI:        https://www.formlyx.com
  * Description:       Connect Formlyx to WordPress and embed hosted forms.
- * Version:           1.0.0
+ * Version:           1.0.3
  * Requires at least: 6.7
  * Requires PHP:      8.1
  * Author:            RazorSoft, Inc.
- * Author URI:        https://razorsoft.us
+ * Author URI:        https://razorsoftinc.com
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       formlyx
+ * Text Domain:       formlyx-forms
  * Domain Path:       /languages
- * Tested up to:      7.1
  *
  * @package Formlyx
  */
@@ -26,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if ( ! defined( 'FORMLYX_VERSION' ) ) {
-	define( 'FORMLYX_VERSION', '1.0.0' );
+	define( 'FORMLYX_VERSION', '1.0.3' );
 }
 
 if ( ! defined( 'FORMLYX_PLUGIN_FILE' ) ) {

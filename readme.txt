@@ -1,14 +1,14 @@
 === Formlyx Forms ===
 Contributors: razorsoftinc
-Tags: forms
+Tags: forms, contact form, form builder, embed, file upload
 Requires at least: 6.7
 Tested up to: 7.1
-Stable tag: 1.0.0
+Stable tag: 1.0.3
 Requires PHP: 8.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Connect your WordPress site to Formlyx and embed published forms.
+Connect your WordPress site to Formlyx and embed published forms, including file-upload fields.
 
 == Description ==
 
@@ -24,25 +24,28 @@ The shortcode is `[formlyx id="FORM_ID"]`. An optional theme attribute accepts `
 
 A page can contain more than one form. Published pages load `https://www.formlyx.com/embed.js` once. That script displays the form and sends the submission to Formlyx. It does not receive this site's connection tokens.
 
+When a Formlyx form includes file-upload fields, visitors upload those files through Formlyx's hosted embed. Upload progress, validation, malware scanning, and storage are handled by Formlyx. WordPress does not store the uploaded files.
+
 The editor shows the selected form's name and ID. The live form appears on the published page. The form picker lists at most 100 published forms. An administrator can still enter a public form ID that is not in that list.
 
 == External services ==
 
 This plugin connects to Formlyx, operated by RazorSoft, Inc.
 
-* `https://api.formlyx.com` is used only on the server, and only after an administrator connects the site. WordPress sends the OAuth authorization code, the refresh token, and the client id to obtain and renew access. It sends the access token to read the workspace name and the list of forms. The response is limited to 1 MB. Tokens stay in WordPress options and are not sent to visitors.
+* `https://api.formlyx.com` is used only on the server, and only after an administrator connects the site. WordPress sends the OAuth authorization code, the refresh token, and the client id to obtain and renew access. It sends the access token to read the workspace name and the list of forms, and to approve this site as an embed origin. The response is limited to 1 MB. Tokens stay in WordPress options and are not sent to visitors.
 * `https://www.formlyx.com/embed.js` is loaded by a visitor's browser when a page contains a Formlyx form. The script is served by Formlyx and is not bundled with this plugin, because Formlyx renders the form and receives the submission. The script sends the form entry to Formlyx. It does not receive this site's OAuth tokens.
+* When a form includes file fields, the visitor's browser uploads file bytes to Formlyx endpoints under `https://api.formlyx.com` (public embed upload routes). Formlyx scans and stores those files in its private object storage. WordPress does not receive the file bytes.
 * Connecting the site sends the administrator's browser to `https://api.formlyx.com` to sign in or create an account and approve access. The site must use HTTPS, except for localhost.
 
 Terms: https://www.formlyx.com/terms
 
 Privacy policy: https://www.formlyx.com/privacy
 
-Settings → Privacy includes suggested text for this site's privacy policy. It covers the stored connection tokens and the information a visitor submits through an embedded form.
+Settings → Privacy includes suggested text for this site's privacy policy. It covers the stored connection tokens, embedded form submissions, and uploaded files handled by Formlyx.
 
 == Installation ==
 
-1. Upload the `formlyx` folder to `/wp-content/plugins/`, or install the zip through Plugins → Add New.
+1. Upload the `formlyx-forms` folder to `/wp-content/plugins/`, or install the zip through Plugins → Add New.
 2. Activate Formlyx Forms on the Plugins screen.
 3. Open Settings → Formlyx and connect your account.
 4. Edit a page, insert the Formlyx Form block, and select a form. Or add `[formlyx id="FORM_ID"]`.
@@ -56,6 +59,10 @@ No. Formlyx is an external hosted service at https://www.formlyx.com. After you 
 = Where are form entries stored? =
 
 Formlyx stores forms and submissions in the hosted service. This plugin does not create WordPress posts for them. Visitors submit the embedded form directly to Formlyx.
+
+= Where are uploaded files stored? =
+
+In Formlyx. File fields upload through the hosted embed to Formlyx. WordPress does not keep copies of those files on this site.
 
 = Does embedding require a connection? =
 
@@ -81,7 +88,26 @@ Uninstall deletes the Formlyx connection, the OAuth client record, unfinished co
 
 The WordPress.org contributor is razorsoftinc.
 
+== Development ==
+
+Readable Gutenberg block source is included under `src/`. The compiled assets WordPress loads are under `build/`. Product documentation: https://www.formlyx.com/wordpress
+
 == Changelog ==
+
+= 1.0.3 =
+* Restrict embed-origin approval to administrators with the manage_options capability.
+* Keep form list and embed status checks available to users who can edit posts or pages.
+* Align packaging with the WordPress.org slug (`formlyx-forms` text domain and ZIP root).
+* Preserve Match WordPress Theme support and the PHP 8.1 requirement from the current plugin source.
+
+= 1.0.2 =
+* Align the plugin text domain with the WordPress.org slug (`formlyx-forms`).
+* Remove `Tested up to` from the main plugin file header (keep it in readme.txt).
+
+= 1.0.1 =
+* Document file-upload handling and privacy disclosures for WordPress.org review.
+* Set Author URI to https://razorsoftinc.com.
+* Include readable Gutenberg block source under `src/`.
 
 = 1.0.0 =
 * Connect, reconnect, and disconnect a Formlyx account from Settings → Formlyx.
@@ -89,6 +115,15 @@ The WordPress.org contributor is razorsoftinc.
 * Match WordPress Theme styles that hosted form from the active theme. PHP 8.1 or newer is required.
 
 == Upgrade Notice ==
+
+= 1.0.3 =
+Administrators approve restricted embed origins. Packaging matches the formlyx-forms WordPress.org identity.
+
+= 1.0.2 =
+Translation text-domain and plugin-header compliance fixes for WordPress.org.
+
+= 1.0.1 =
+Documentation and packaging updates for WordPress.org readiness. No required configuration changes.
 
 = 1.0.0 =
 Connect a Formlyx account and embed published forms.

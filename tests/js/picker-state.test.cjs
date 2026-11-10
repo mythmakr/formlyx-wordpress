@@ -10,7 +10,7 @@ const source = fs
 
 const sandbox = { module: { exports: {} }, exports: {} };
 vm.runInNewContext(
-	`${ source }\nmodule.exports = { filterForms, isFormId, normalizeTheme, messageKind, embedNoticeStatus, embedShowsApproval, THEMES };`,
+	`${ source }\nmodule.exports = { filterForms, isFormId, normalizeTheme, messageKind, embedNoticeStatus, embedShowsApproval, embedNeedsAdministrator, THEMES };`,
 	sandbox
 );
 const {
@@ -20,6 +20,7 @@ const {
 	messageKind,
 	embedNoticeStatus,
 	embedShowsApproval,
+	embedNeedsAdministrator,
 	THEMES,
 } = sandbox.module.exports;
 
@@ -68,9 +69,20 @@ test( 'embed permission states choose the notice and the approval action', () =>
 	assert.strictEqual( embedNoticeStatus( 'local_site' ), 'warning' );
 	assert.strictEqual( embedNoticeStatus( 'reconnect' ), 'warning' );
 	assert.strictEqual( embedShowsApproval( 'approval_required' ), true );
+	assert.strictEqual( embedShowsApproval( 'approval_required', true ), true );
+	assert.strictEqual( embedShowsApproval( 'approval_required', false ), false );
 	assert.strictEqual( embedShowsApproval( 'authorized' ), false );
 	assert.strictEqual( embedShowsApproval( 'local_site' ), false );
 	assert.strictEqual( embedShowsApproval( 'reconnect' ), false );
+	assert.strictEqual(
+		embedNeedsAdministrator( 'approval_required', false ),
+		true
+	);
+	assert.strictEqual(
+		embedNeedsAdministrator( 'approval_required', true ),
+		false
+	);
+	assert.strictEqual( embedNeedsAdministrator( 'authorized', false ), false );
 } );
 
 test( 'error codes map to editor states', () => {
