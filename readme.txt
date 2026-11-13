@@ -14,6 +14,8 @@ Connect your WordPress site to Formlyx and embed published forms, including file
 
 Formlyx is a hosted form service from RazorSoft, Inc. Forms and submissions stay at [formlyx.com](https://www.formlyx.com). This plugin connects a site to that account and embeds published forms.
 
+A short product walkthrough is on the [Formlyx WordPress page](https://www.formlyx.com/wordpress).
+
 Open Settings → Formlyx and choose Connect to Formlyx. You can sign in or create a Formlyx account on Formlyx's site, including email verification, and then approve access. WordPress does not ask for an API key or your Formlyx password.
 
 The site needs HTTPS. HTTP works only on localhost. The connection can be checked, reconnected, or disconnected from the same settings page. Disconnect removes the connection stored in WordPress and asks Formlyx to revoke it. It does not delete hosted forms, submissions, or the Formlyx account.
@@ -45,12 +47,17 @@ Settings → Privacy includes suggested text for this site's privacy policy. It 
 
 == Installation ==
 
-1. Upload the `formlyx-forms` folder to `/wp-content/plugins/`, or install the zip through Plugins → Add New.
-2. Activate Formlyx Forms on the Plugins screen.
-3. Open Settings → Formlyx and connect your account.
+1. In WordPress, open Plugins → Add New, search for "Formlyx Forms", then Install and Activate.
+2. Or upload the plugin ZIP: Plugins → Add New → Upload Plugin, choose the ZIP, install, and activate.
+3. Open Settings → Formlyx and choose Connect to Formlyx. Sign in or create an account, then approve access. WordPress does not ask for an API key.
 4. Edit a page, insert the Formlyx Form block, and select a form. Or add `[formlyx id="FORM_ID"]`.
+5. Optionally set the theme attribute (`auto`, `light`, `dark`, `inherit`, `unstyled`, or `match`), then publish the page.
 
 == Frequently Asked Questions ==
+
+= Do I need a Formlyx account? =
+
+Yes, to use Settings → Formlyx connect and the form picker. Formlyx is a hosted service at https://www.formlyx.com. A published form that Formlyx allows the public to embed can also be placed with its form ID in the block or the shortcode, without connecting the site.
 
 = Is Formlyx part of WordPress? =
 
@@ -70,7 +77,7 @@ The form picker does. A published form that Formlyx allows the public to embed c
 
 = Which theme values work? =
 
-`auto`, `light`, `dark`, `inherit`, `unstyled`, and `match`. The default is `auto`. `match` applies the active WordPress theme to the hosted form. The form's saved Formlyx appearance stays in place for the other values.
+`auto`, `light`, `dark`, `inherit`, `unstyled`, and `match`. The default is `auto`. `match` is Match WordPress Theme: it applies the active WordPress theme to the hosted form. The form's saved Formlyx appearance stays in place for the other values. This is not Match My Site AI analysis.
 
 = Why does the editor not show the live form? =
 
@@ -88,9 +95,15 @@ Uninstall deletes the Formlyx connection, the OAuth client record, unfinished co
 
 The WordPress.org contributor is razorsoftinc.
 
+== Screenshots ==
+
+1. Formlyx Form block in the WordPress editor — choose a published form or enter a form ID.
+2. A Formlyx form embedded on a published WordPress page.
+3. Connect to Formlyx — sign in and approve access. WordPress does not ask for an API key.
+
 == Development ==
 
-Readable Gutenberg block source is included under `src/`. The compiled assets WordPress loads are under `build/`. Product documentation: https://www.formlyx.com/wordpress
+Readable Gutenberg block source is included under `src/`. The compiled assets WordPress loads are under `build/`. Product documentation and walkthrough: https://www.formlyx.com/wordpress
 
 == Changelog ==
 
