@@ -14,7 +14,11 @@ Connect your WordPress site to Formlyx and embed published forms, including file
 
 Formlyx is a hosted form service from RazorSoft, Inc. Forms and submissions stay at [formlyx.com](https://www.formlyx.com). This plugin connects a site to that account and embeds published forms.
 
-A short product walkthrough is on the [Formlyx WordPress page](https://www.formlyx.com/wordpress).
+= Video Walkthrough =
+
+https://www.youtube.com/watch?v=mitfkXKSRjg
+
+Product documentation is also on the [Formlyx WordPress page](https://www.formlyx.com/wordpress).
 
 Open Settings → Formlyx and choose Connect to Formlyx. You can sign in or create a Formlyx account on Formlyx's site, including email verification, and then approve access. WordPress does not ask for an API key or your Formlyx password.
 
